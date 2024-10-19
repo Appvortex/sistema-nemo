@@ -48,14 +48,14 @@ const MarkDeleteWhatsAppMessage = async (from: any, timestamp?: any, msgId?: str
 
                 if (settings.lgpdDeleteMessage === "enabled" && settings.enableLGPD === "enabled") {
 
-                    await messageToUpdate.update({ body: "🚫 _Mensagem Apagada_", isDeleted: true });
+                    await messageToUpdate.update({ body: "🚫 _Mensaje Borrado_", isDeleted: true });
 
                 } else {
                     await messageToUpdate.update({ isDeleted: true });
 
                 }
 
-                await UpdateTicketService({ ticketData: { lastMessage: "🚫 _Mensagem Apagada_" }, ticketId: ticket.id, companyId })
+                await UpdateTicketService({ ticketData: { lastMessage: "🚫 _Mensaje Borrado_" }, ticketId: ticket.id, companyId })
 
                 const io = getIO();
                 io.of(String(companyId))

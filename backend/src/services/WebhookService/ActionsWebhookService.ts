@@ -111,8 +111,9 @@ export const ActionsWebhookService = async (
 
 
     numberClient = removerNaoLetrasNumeros(numberClient);
+    // codigo de pais 
 
-    if (numberClient.substring(0, 2) === "55") {
+    if (numberClient.substring(0, 2) === "") {
       if (parseInt(numberClient.substring(2, 4)) >= 31) {
         if (numberClient.length === 13) {
           numberClient =
@@ -255,7 +256,8 @@ export const ActionsWebhookService = async (
       }
 
       if (nodeSelected.type === "ticket") {
-        const queue = await ShowQueueService(nodeSelected.data.data.id, companyId)
+        const queueId = nodeSelected.data?.data?.id || nodeSelected.data?.id
+        const queue = await ShowQueueService(queueId, companyId)
 
 
         await ticket.update({
@@ -521,15 +523,6 @@ export const ActionsWebhookService = async (
       let isMenu: boolean;
 
       if (nodeSelected.type === "menu") {
-
-        /*
-        if(ticket){
-          await ticket.update({
-            repeatMessage: 0
-          })
-          
-        }
-        */
 
         if (pressKey) {
 

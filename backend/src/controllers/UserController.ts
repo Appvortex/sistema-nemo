@@ -130,14 +130,14 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     try {
       const _email = {
         to: email,
-        subject: `Login e senha da Empresa ${companyName}`,
-        text: `Olá ${name}, este é um email sobre o cadastro da ${companyName}!<br><br>
-        Segue os dados da sua empresa:<br><br>Nome: ${companyName}<br>Email: ${email}<br>Senha: ${password}<br>Data Vencimento Trial: ${dateToClient(date)}`
-      }
+        subject: `👤 Usuario y 🔑 contraseña de la Empresa. ${companyName}`,
+        text: `Hola ${name}, Este es un correo sobre el registro de la 📧📝 ${companyName}!<br><br>
+        Adjuntos los datos de tu empresa 📊:<br><br>Nombre: ${companyName} 🏢<br>Email: ${email} 📧<br>Contraseña: ${password} 🔑<br>Fecha de vencimiento de la prueba: ${dateToClient(date)} 📅`
+    }
 
       await SendMail(_email)
     } catch (error) {
-      console.log('Não consegui enviar o email')
+      console.log('No pude enviar el correo electrónico')
     }
 
     try {
@@ -148,12 +148,12 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
         const whatsappId = whatsappCompany.whatsapps[0].id
         const wbot = getWbot(whatsappId);
 
-        const body = `Olá ${name}, este é uma mensagem sobre o cadastro da ${companyName}!\n\nSegue os dados da sua empresa:\n\nNome: ${companyName}\nEmail: ${email}\nSenha: ${password}\nData Vencimento Trial: ${dateToClient(date)}`
+        const body = `Hola ${name}, este es un mensaje sobre el registro de la ${companyName} 📧📝!\n\nAdjunto los datos de tu empresa 📊:\n\nNombre: ${companyName} 🏢\nEmail: ${email} 📧\nContraseña: ${password} 🔑\nFecha de vencimiento de la prueba: ${dateToClient(date)} 📅`
 
-        await wbot.sendMessage(`55${phone}@s.whatsapp.net`, { text: body });
+        await wbot.sendMessage(`${phone}@s.whatsapp.net`, { text: body });
       }
     } catch (error) {
-      console.log('Não consegui enviar a mensagem')
+      console.log('No pude enviar el mensaje')
     }
 
     return res.status(200).json(user);
@@ -310,7 +310,7 @@ export const remove = async (
   });
 
   if (companyId !== user.companyId) {
-    return res.status(400).json({ error: "Você não possui permissão para acessar este recurso!" });
+    return res.status(400).json({ error: "No tienes permiso para acceder a este recurso! 🚫" });
   } else {
     await DeleteUserService(userId, companyId);
 
@@ -362,7 +362,7 @@ export const mediaUpload = async (
       });
 
 
-    return res.status(200).json({ user, message: "Imagem atualizada" });
+    return res.status(200).json({ user, message: "Imagem actualizada" });
   } catch (err: any) {
     throw new AppError(err.message);
   }

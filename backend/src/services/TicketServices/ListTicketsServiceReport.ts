@@ -47,9 +47,9 @@ export default async function ListTicketsServiceReport(
 	  t."lastMessage",
     t.uuid,
     case t.status
-      when 'open' then 'ABERTO'
-      when 'closed' then 'FECHADO'
-      when 'pending' then 'PENDENTE'
+      when 'open' then 'ABIERTO'
+      when 'closed' then 'CERRADO'
+      when 'pending' then 'PENDIENTE'
       when 'group' then 'GRUPO'
       when 'nps' then 'NPS'
       when 'lgpd' then 'LGPD'
@@ -92,9 +92,9 @@ export default async function ListTicketsServiceReport(
 	  t."lastMessage",
     t.uuid,
     case t.status
-      when 'open' then 'ABERTO'
-      when 'closed' then 'FECHADO'
-      when 'pending' then 'PENDENTE'
+      when 'open' then 'ABIERTO'
+      when 'closed' then 'CERRADO'
+      when 'pending' then 'PENDIENTE'
       when 'group' then 'GRUPO'
       when 'nps' then 'NPS'
       when 'lgpd' then 'LGPD'

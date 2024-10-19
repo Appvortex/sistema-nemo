@@ -153,7 +153,7 @@ async function handleSendScheduledMessage(job) {
     scheduleRecord = await Schedule.findByPk(schedule.id);
   } catch (e) {
     Sentry.captureException(e);
-    logger.info(`Erro ao tentar consultar agendamento: ${schedule.id}`);
+    logger.info(`Error al intentar consultar la programación: ${schedule.id}`);
   }
 
   try {
@@ -350,7 +350,7 @@ async function handleVerifyCampaigns(job) {
       );
 
     if (campaigns.length > 0) {
-      logger.info(`Campanhas encontradas: ${campaigns.length}`);
+      logger.info(`Campañas encontradas: ${campaigns.length}`);
 
       const promises = campaigns.map(async (campaign) => {
         try {
@@ -362,7 +362,7 @@ async function handleVerifyCampaigns(job) {
           const scheduledAt = moment(campaign.scheduledAt);
           const delay = scheduledAt.diff(now, "milliseconds");
           logger.info(
-            `Campanha enviada para a fila de processamento: Campanha=${campaign.id}, Delay Inicial=${delay}`
+            `Campaña enviada a la cola de procesamiento: Campaña=${campaign.id}, Delay Inicial=${delay}`
           );
 
           return campaignQueue.add(
@@ -378,11 +378,11 @@ async function handleVerifyCampaigns(job) {
 
       await Promise.all(promises);
 
-      logger.info('Todas as campanhas foram processadas e adicionadas à fila.');
+      logger.info('Todas las campañas han sido procesadas y añadidas a la colaa.');
     }
   } catch (err) {
     Sentry.captureException(err);
-    logger.error(`Error processing campaigns: ${err.message}`);
+    logger.error(`Error al procesar campañas : ${err.message}`);
   } finally {
     isProcessing = false;
   }
@@ -472,7 +472,7 @@ export function parseToMilliseconds(seconds) {
 
 async function sleep(seconds) {
   logger.info(
-    `Sleep de ${seconds} segundos iniciado: ${moment().format("HH:mm:ss")}`
+    `Tiempo de espera de ${seconds} segundos iniciado: ${moment().format("HH:mm:ss")}`
   );
   return new Promise(resolve => {
     setTimeout(() => {
@@ -632,7 +632,7 @@ const checkTime = async () => {
 
 
   logger.info(
-    `Envio inicia as ${hour} e termina as ${endHours}, hora atual ${timeNow} não está dentro do horário`
+    `Envio inicia as ${hour} e termina as ${endHours}, hora actual ${timeNow} No está dentro del horario`
   );
   messageQueue.clean(0, "delayed");
   messageQueue.clean(0, "wait");
@@ -763,7 +763,7 @@ async function handleProcessCampaign(job) {
             { removeOnComplete: true }
           );
           queuePromises.push(queuePromise);
-          logger.info(`Registro enviado pra fila de disparo: Campanha=${campaign.id};Contato=${contacts[i].name};delay=${delay}`);
+          logger.info(`Registro enviado a la Area de disparo:: Campanha=${campaign.id};Contato=${contacts[i].name};delay=${delay}`);
           // }
         }
         await Promise.all(queuePromises);
@@ -886,7 +886,7 @@ async function handleDispatchCampaign(job) {
     }
 
     logger.info(
-      `Disparo de campanha solicitado: Campanha=${campaignId};Registro=${campaignShippingId}`
+      `Disparo de campaña solicitado: Campanha=${campaignId};Registro=${campaignShippingId}`
     );
 
     const campaignShipping = await CampaignShipping.findByPk(
@@ -1038,7 +1038,7 @@ async function handleDispatchCampaign(job) {
       });
 
     logger.info(
-      `Campanha enviada para: Campanha=${campaignId};Contato=${campaignShipping.contact.name}`
+      `Campaña enviada: Campanha=${campaignId};Contato=${campaignShipping.contact.name}`
     );
   } catch (err: any) {
     Sentry.captureException(err);
@@ -1268,11 +1268,11 @@ async function handleVerifyQueue(job) {
                   //   ticket,
                   // });
 
-                  logger.info(`Atendimento Perdido: ${ticket.id} - Empresa: ${companyId}`);
+                  logger.info(`Atención Perdida: ${ticket.id} - Empresa: ${companyId}`);
                 });
               }
             } else {
-              logger.info(`Condição não respeitada - Empresa: ${companyId}`);
+              logger.info(`Condición no respetada - Empresa: ${companyId}`);
             }
           }
         }
@@ -1396,7 +1396,7 @@ async function handleRandomUser() {
                     if (sendGreetingMessageOneQueues) {
                       const ticketToSend = await ShowTicketService(ticket.id, ticket.companyId);
 
-                      await SendWhatsAppMessage({ body: `\u200e *Assistente Virtual*:\nAguarde enquanto localizamos um atendente... Você será atendido em breve!`, ticket: ticketToSend });
+                      await SendWhatsAppMessage({ body: `\u200e *Asistente Virtual 🤖*:\nEspere mientras localizamos a un agente... ¡Será atendido pronto! ⏳!`, ticket: ticketToSend });
 
                     }
 
@@ -1408,7 +1408,7 @@ async function handleRandomUser() {
                     });
 
                     //await ticket.reload();
-                    logger.info(`Ticket ID ${ticket.id} atualizado para UserId ${randomUserId} - ${ticket.updatedAt}`);
+                    logger.info(`Ticket ID ${ticket.id} Actualizado para UserId 🔄 ${randomUserId} - ${ticket.updatedAt}`);
                   } else {
                     //logger.info(`Ticket ID ${ticket.id} NOT updated with UserId ${randomUserId} - ${ticket.updatedAt}`);            
                   }
@@ -1430,7 +1430,7 @@ async function handleRandomUser() {
                         if (sendGreetingMessageOneQueues) {
 
                           const ticketToSend = await ShowTicketService(ticket.id, ticket.companyId);
-                          await SendWhatsAppMessage({ body: "*Assistente Virtual*:\nAguarde enquanto localizamos um atendente... Você será atendido em breve!", ticket: ticketToSend });
+                          await SendWhatsAppMessage({ body: "*Asistente Virtual 🤖*:\nEspere mientras localizamos a un agente... ¡Será atendido pronto! ⏳", ticket: ticketToSend });
                         };
 
                         await UpdateTicketService({
@@ -1440,7 +1440,7 @@ async function handleRandomUser() {
 
                         });
 
-                        logger.info(`Ticket ID ${ticket.id} atualizado para UserId ${randomUserId} - ${ticket.updatedAt}`);
+                        logger.info(`Ticket ID ${ticket.id} Actualizado para UserId 🔄 ${randomUserId} - ${ticket.updatedAt}`);
                       } else {
                         //logger.info(`Ticket ID ${ticket.id} NOT updated with UserId ${randomUserId} - ${ticket.updatedAt}`);            
                       }

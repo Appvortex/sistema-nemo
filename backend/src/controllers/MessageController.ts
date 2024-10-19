@@ -190,7 +190,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     return res.send();
   } catch (error) {
     console.log(error);
-    //return res.status(400).json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -371,7 +371,7 @@ export const send = async (req: Request, res: Response): Promise<Response> => {
     if (sendMessageWithExternalApi) {
 
       if (!whatsapp) {
-        throw new Error("Não foi possível realizar a operação");
+        throw new Error("No fue posible realizar la operación ❌");
       }
 
       if (messageData.number === undefined) {
@@ -467,7 +467,7 @@ export const sendMessageFlow = async (
     const whatsapp = await Whatsapp.findByPk(whatsappId);
 
     if (!whatsapp) {
-      throw new Error("Não foi possível realizar a operação");
+      throw new Error("No fue posible realizar la operación ❌");
     }
 
     if (messageData.number === undefined) {

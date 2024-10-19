@@ -1197,7 +1197,7 @@ const verifyQueue = async (
 
       console.log("log... 1206")
 
-      await handleMessageIntegration(msg, wbot, companyId, integrations, ticket, contact, ticket)
+      await handleMessageIntegration(msg, wbot, companyId, integrations, ticket)
 
       if (msg.key.fromMe) {
         console.log("log... 1211")
@@ -1370,7 +1370,7 @@ const verifyQueue = async (
     await ticket.reload();
   }
 
-  if (String(selectedOption).toLocaleLowerCase() == "sair") {
+  if (String(selectedOption).toLocaleLowerCase() == "Salir") {
     // Encerra atendimento
 
     console.log("log... 1384")
@@ -1553,7 +1553,7 @@ const verifyQueue = async (
         });
 
         const body = formatBody(
-          `\u200e ${choosenQueue.greetingMessage}\n\n${options}\n*[ # ]* Voltar para o menu principal\n*[ Sair ]* Encerrar atendimento`,
+          `\u200e ${choosenQueue.greetingMessage}\n\n${options}\n*[ # ]* Volver al menú principal ⬅️📋\n*[ Salir ]* Finalizar atención 🔚💼`,
           ticket
         );
 
@@ -1748,7 +1748,7 @@ const verifyQueue = async (
       queues.forEach((queue, index) => {
         options += `*[ ${index + 1} ]* - ${queue.name}\n`;
       });
-      options += `\n*[ Sair ]* - Encerrar atendimento`;
+      options += `\n*[ Salir ]* - Finalizar atención 🔚💼`;
 
       const body = formatBody(
         `\u200e${greetingMessage}\n\n${options}`,
@@ -2088,11 +2088,10 @@ const handleOpenAi = async (
     limit: prompt.maxMessages
   });
 
-  const promptSystem = `Nas respostas utilize o nome ${sanitizeName(
+  const promptSystem = `En las respuestas utiliza el nombre 📝👤 ${sanitizeName(
     contact.name || "Amigo(a)"
-  )} para identificar o cliente.\nSua resposta deve usar no máximo ${prompt.maxTokens
-    } tokens e cuide para não truncar o final.\nSempre que possível, mencione o nome dele para ser mais personalizado o atendimento e mais educado. Quando a resposta requer uma transferência para o setor de atendimento, comece sua resposta com 'Ação: Transferir para o setor de atendimento'.\n
-  ${prompt.prompt}\n`;
+  )} Para identificar al cliente.\nTu respuesta debe usar como máximo ✍️⏳ ${prompt.maxTokens
+    } Tokens y asegúrate de no truncar el final 🔠🚫✂️.\nSiempre que sea posible, menciona su nombre para que la atención sea más personalizada y educada. Cuando la respuesta requiera una transferencia al sector de atención, comienza tu respuesta con 'Acción: Transferir al sector de atención${prompt.prompt}\n`;
 
   let messagesOpenAi = [];
 
@@ -2124,10 +2123,10 @@ const handleOpenAi = async (
 
     let response = chat.choices[0].message?.content;
 
-    if (response?.includes("Ação: Transferir para o setor de atendimento")) {
+    if (response?.includes("Acción: Transferir al sector de atención 🔄")) {
       await transferQueue(prompt.queueId, ticket, contact);
       response = response
-        .replace("Ação: Transferir para o setor de atendimento", "")
+        .replace("Acción: Transferir al sector de atención 🔄", "")
         .trim();
     }
 
@@ -2156,7 +2155,7 @@ const handleOpenAi = async (
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.mp3`);
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.wav`);
         } catch (error) {
-          console.log(`Erro para responder com audio: ${error}`);
+          console.log(`Error al responder con audio 🎤❌: ${error}`);
         }
       });
     }
@@ -2194,10 +2193,10 @@ const handleOpenAi = async (
     });
     let response = chat.choices[0].message?.content;
 
-    if (response?.includes("Ação: Transferir para o setor de atendimento")) {
+    if (response?.includes("Acción: Transferir al sector de atención 🔄💼")) {
       await transferQueue(prompt.queueId, ticket, contact);
       response = response
-        .replace("Ação: Transferir para o setor de atendimento", "")
+        .replace("Acción: Transferir al sector de atención 🔄💼", "")
         .trim();
     }
     if (prompt.voice === "texto") {
@@ -2225,7 +2224,7 @@ const handleOpenAi = async (
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.mp3`);
           deleteFileSync(`${publicFolder}/${fileNameWithOutExtension}.wav`);
         } catch (error) {
-          console.log(`Erro para responder com audio: ${error}`);
+          console.log(`Error al responder con audio 🎤❌: ${error}`);
         }
       });
     }
@@ -2331,7 +2330,7 @@ const flowbuilderIntegration = async (
     }
   });
 
-  
+
   if (
     !isFirstMsg &&
     listPhrase.filter(item => item.phrase === body).length === 0
@@ -2625,9 +2624,6 @@ export const handleMessageIntegration = async (
   companyId: number,
   queueIntegration: QueueIntegrations,
   ticket: Ticket,
-  contact: Contact,
-  isFirstMsg?: Ticket,
-  isTranfered?: boolean
 ): Promise<void> => {
   const msgType = getTypeMessage(msg);
 
@@ -2888,7 +2884,7 @@ const handleMessage = async (
     )
 
 
-    
+
     const enableLGPD = settings.enableLGPD === "enabled";
 
     const isFirstMsg = await Ticket.findOne({
@@ -3225,6 +3221,8 @@ const handleMessage = async (
       }
 
     }
+  
+
 
     //integraçao na conexao
     if (
@@ -3238,16 +3236,32 @@ const handleMessage = async (
       !ticket.useIntegration
     ) {
 
-      console.log("integraçao na conexão")
-
       const integrations = await ShowQueueIntegrationService(whatsapp.integrationId, companyId);
 
-      await handleMessageIntegration(msg, wbot, companyId, integrations, ticket, contact, isFirstMsg)
+      await handleMessageIntegration(msg, wbot, companyId, integrations, ticket)
+
 
       return
     }
 
+    if (
+      !ticket.imported &&
+      !msg.key.fromMe &&
+      !ticket.isGroup &&
+      !ticket.userId &&
+      ticket.integrationId
+      && ticket.useIntegration
+    ) {
+      const integrations = await ShowQueueIntegrationService(ticket.integrationId, companyId);
 
+      await handleMessageIntegration(msg, wbot, companyId, integrations, ticket)
+
+      if (msg.key.fromMe) {
+        await ticket.update({
+          typebotSessionTime: moment().toDate(),
+        })
+      }
+    }
 
     if (
       !ticket.imported &&
@@ -3259,7 +3273,6 @@ const handleMessage = async (
       !ticket.useIntegration
     ) {
       // console.log("antes do verifyqueue")
-      console.log("log... 3374")
       await verifyQueue(wbot, msg, ticket, contact, settings, ticketTraking);
 
       if (ticketTraking.chatbotAt === null) {
@@ -3270,12 +3283,131 @@ const handleMessage = async (
     }
 
     if (ticket.queueId > 0) {
-      console.log("log... 3385")
       await ticketTraking.update({
         queueId: ticket.queueId
       })
     }
 
+    // Verificação se aceita audio do contato
+    if (
+      getTypeMessage(msg) === "audioMessage" &&
+      !msg.key.fromMe &&
+      (!ticket.isGroup || whatsapp.groupAsTicket === "enabled") &&
+      (!contact?.acceptAudioMessage ||
+        settings?.acceptAudioMessageContact === "disabled")
+    ) {
+      const sentMessage = await wbot.sendMessage(
+        `${contact.number}@c.us`,
+        {
+          text: `\u200e*Asistente Virtual 🤖💻*:\nLamentablemente no podemos escuchar ni enviar audios por este canal de atención. Por favor, envía un mensaje de texto 📄❌🎧.`
+        },
+        {
+          quoted: {
+            key: msg.key,
+            message: {
+              extendedTextMessage: msg.message.extendedTextMessage
+            }
+          }
+        }
+      );
+      await verifyMessage(sentMessage, ticket, contact, ticketTraking);
+    }
+
+
+    try {
+      if (!msg.key.fromMe && settings?.scheduleType && ticket.queueId !== null && (!ticket.isGroup || whatsapp.groupAsTicket === "enabled") && ticket.status !== "open") {
+        /**
+         * Tratamento para envio de mensagem quando a empresa/fila está fora do expediente
+         */
+        const queue = await Queue.findByPk(ticket.queueId)
+
+        if (settings?.scheduleType === "queue") {
+          currentSchedule = await VerifyCurrentSchedule(companyId, queue.id, 0);
+        }
+
+        if (
+          settings?.scheduleType === "queue" &&
+          !isNil(currentSchedule) && ticket.amountUsedBotQueues < whatsapp.maxUseBotQueues &&
+          (!currentSchedule || currentSchedule.inActivity === false)
+          && !ticket.imported
+        ) {
+
+          if (Number(whatsapp.timeUseBotQueues) > 0) {
+
+            if (ticket.isOutOfHour === false && ticketTraking.chatbotAt !== null) {
+              await ticketTraking.update({
+                chatbotAt: null
+              });
+              await ticket.update({
+                amountUsedBotQueues: 0
+              });
+            }
+
+            //Regra para desabilitar o chatbot por x minutos/horas após o primeiro envio
+            let dataLimite = new Date();
+            let Agora = new Date();
+
+
+            if (ticketTraking.chatbotAt !== null) {
+              dataLimite.setMinutes(ticketTraking.chatbotAt.getMinutes() + (Number(whatsapp.timeUseBotQueues)));
+
+              if (ticketTraking.chatbotAt !== null && Agora < dataLimite && whatsapp.timeUseBotQueues !== "0" && ticket.amountUsedBotQueues !== 0) {
+                return
+              }
+            }
+
+            await ticketTraking.update({
+              chatbotAt: null
+            })
+          }
+
+          const outOfHoursMessage = queue.outOfHoursMessage;
+
+          if (outOfHoursMessage !== "") {
+            // console.log("entrei2");
+            const body = formatBody(`${outOfHoursMessage}`, ticket);
+
+            const debouncedSentMessage = debounce(
+              async () => {
+                await wbot.sendMessage(
+                  `${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"
+                  }`,
+                  {
+                    text: body
+                  }
+                );
+              },
+              1000,
+              ticket.id
+            );
+            debouncedSentMessage();
+
+          }
+          //atualiza o contador de vezes que enviou o bot e que foi enviado fora de hora
+          await ticket.update({
+            isOutOfHour: true,
+            amountUsedBotQueues: ticket.amountUsedBotQueues + 1
+          });
+          return;
+        }
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      console.log(e);
+    }
+
+    if (ticket.queue && ticket.queueId && !msg.key.fromMe) {
+      if (!ticket.user || ticket.queue?.chatbots?.length > 0) {
+        await sayChatbot(ticket.queueId, wbot, ticket, contact, msg, ticketTraking);
+      }
+
+      //atualiza mensagem para indicar que houve atividade e aí contar o tempo novamente para enviar mensagem de inatividade
+      await ticket.update({
+        sendInactiveMessage: false
+      });
+    }
+
+    await ticket.reload();
 
   } catch (err) {
     Sentry.captureException(err);
@@ -3284,8 +3416,6 @@ const handleMessage = async (
   }
 
 }
-
-
 const handleMsgAck = async (
   msg: WAMessage,
   chat: number | null | undefined

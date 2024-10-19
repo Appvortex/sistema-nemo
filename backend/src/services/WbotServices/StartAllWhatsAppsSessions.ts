@@ -17,7 +17,7 @@ export const StartAllWhatsAppsSessions = async (
       await Promise.all(promises);
     }
 
-    // fechar os tickets automaticamente
+    // ❌ Cerrar os tickets automaticamente
     // if (whatsapps.length > 0) {
     //   whatsapps.forEach(whatsapp => {
     //     const timeClosed = whatsapp.expiresTicket ? (((whatsapp.expiresTicket * 60) * 60) * 1000) : 500000;

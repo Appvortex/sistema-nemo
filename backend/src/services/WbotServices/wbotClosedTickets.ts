@@ -67,7 +67,7 @@ const handleOpenTickets = async (companyId: number, whatsapp: Whatsapp) => {
       });
 
       if (ticketsForInactiveMessage && ticketsForInactiveMessage.length > 0) {
-        logger.info(`Encontrou ${ticketsForInactiveMessage.length} atendimentos para enviar mensagem de inatividade na empresa ${companyId}- na conexão ${whatsapp.name}!`)
+        logger.info(`Encontrou ${ticketsForInactiveMessage.length} Atenciones para enviar mensaje de inactividad en la empresa  ${companyId}- En la conexión ${whatsapp.name}!`)
         await Promise.all(ticketsForInactiveMessage.map(async ticket => {
           await ticket.reload();
           if (!ticket.sendInactiveMessage) {
@@ -116,7 +116,7 @@ const handleOpenTickets = async (companyId: number, whatsapp: Whatsapp) => {
 
 
     if (ticketsToClose && ticketsToClose.length > 0) {
-      logger.info(`Encontrou ${ticketsToClose.length} atendimentos para encerrar na empresa ${companyId} - na conexão ${whatsapp.name}!`);
+      logger.info(`Encontro ${ticketsToClose.length} Atenciones para enviar mensaje de inactividad en la empresa  ${companyId} - En la conexión ${whatsapp.name}!`);
 
       for (const ticket of ticketsToClose) {
         await ticket.reload();
@@ -170,7 +170,7 @@ const handleNPSTickets = async (companyId: number, whatsapp: any) => {
   });
 
   if (ticketsToClose && ticketsToClose.length > 0) {
-    logger.info(`Encontrou ${ticketsToClose.length} atendimentos para encerrar NPS na empresa ${companyId} - na conexão ${whatsapp.name}!`);
+    logger.info(`Encontro ${ticketsToClose.length} Atenciones para finalizar NPS en la empresa ${companyId} - la conexion ${whatsapp.name}!`);
     await Promise.all(ticketsToClose.map(async ticket => {
       await ticket.reload();
       const ticketTraking = await TicketTraking.findOne({

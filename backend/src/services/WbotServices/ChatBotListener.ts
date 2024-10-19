@@ -155,7 +155,7 @@ const sendMessageImage = async (
 
 //       const optionsBack =
 //         options.length > 0
-//           ? `${options}\n*#* Voltar para o menu principal`
+//           ? `${options}\n*#* Volver al menú principal ⬅️📋`
 //           : options;
 
 //       if (options.length > 0) {
@@ -301,8 +301,8 @@ const sendDialog = async (
 
       const optionsBack =
         options.length > 0
-          ? `${options}\n*[ # ]* Voltar para o menu principal\n*[ Sair ]* Encerrar atendimento`
-          : `${options}\n*[ Sair ]* Encerrar atendimento`;
+          ? `${options}\n*[ # ]* Volver al menú principal ⬅️📋l\n*[ Salir ]* Finalizar atención 🔚`
+          : `${options}\n*[ Salir ]* Finalizar atención 🔚`;
 
       if (options.length > 0) {
         const body = formatBody(`\u200e ${choosenQueue.greetingMessage}\n\n${optionsBack}`, ticket);
@@ -442,7 +442,7 @@ const backToMainMenu = async (
     queues.forEach((option, index) => {
       options += `*[ ${index + 1} ]* - ${option.name}\n`;
     });
-    options += `\n*[ Sair ]* - Encerrar Atendimento`;
+    options += `\n*[ Salir ]* - Finalizar atención 🔚`;
 
 
     const body = formatBody(`\u200e ${greetingMessage}\n\n${options}`, ticket);
@@ -1352,7 +1352,7 @@ export const sayChatbot = async (
 
   //  }
 
-  if (String(selectedOption).toLocaleLowerCase() === "sair") {
+  if (String(selectedOption).toLocaleLowerCase() === "Salir") {
     const ticketUpdateAgent = {
       ticketData: {
         status: "closed",
