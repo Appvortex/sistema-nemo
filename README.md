@@ -126,6 +126,7 @@ Executa o npm install , cria o build cria as tabela e insere os registro padrão
 
 ```bash
 cd whasapoofi/backend
+npm install && npm run build
 npm install
 npm run build
 npx sequelize db:migrate
@@ -138,6 +139,7 @@ Vá para a pasta frontend e instale as dependências:
 cd ../frontend
 cp .env.example .env
 nano .env
+npm install --force
 ```
 
 ```bash
