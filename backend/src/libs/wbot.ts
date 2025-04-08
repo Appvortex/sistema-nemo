@@ -11,8 +11,9 @@ import makeWASocket, {
   isJidGroup,
   jidNormalizedUser,
   makeCacheableSignalKeyStore,
-  makeInMemoryStore,
+  
 } from "@whiskeysockets/baileys";
+import { makeInMemoryStore } from '@whiskeysockets/baileys/lib/store';
 import { FindOptions } from "sequelize/types";
 import Whatsapp from "../models/Whatsapp";
 import logger from "../utils/logger";
